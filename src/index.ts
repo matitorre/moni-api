@@ -15,8 +15,13 @@ import { dashboardRoutes } from "./routes/dashboard";
 
 const app: any = Fastify({ logger });
 
+// Allow multiple origins via comma-separated env.CORS_ORIGIN
+const corsOrigin: any = env.CORS_ORIGIN === "*"
+  ? true
+  : env.CORS_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean);
+
 await app.register(cors, {
-  origin: env.CORS_ORIGIN,
+  origin: corsOrigin,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Authorization", "Content-Type", "Idempotency-Key"],
   credentials: false,
